@@ -1,13 +1,36 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import { db } from '../firebase';
 
 function Detail() {
+  const { id } = useParams();
+  const [ movie, setMovie ] = useState()
+
+  useEffect(()=>{
+    //Grab the movie info from DB
+    db.collection("movies")
+    .doc(id)
+    .get()
+    .then((doc)=>{
+      if(doc.exists){
+        //save the movie data
+        setMovie(doc.data());
+      } else {
+        //redirect to homepage
+      }
+    })
+  }, [])
+
+
   return <Container>
+    {movie && (
+      <>
       <Background>
-        <img src="https://cdn.vox-cdn.com/thumbor/eU72waq9EjmEsOS-sMcndQrGzXc=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/11604673/BO_RGB_s120_22a_cs_pub.pub16.318.jpg" />
+        <img src= {movie.backgroundImg} />
       </Background>
       <ImageTitle>
-        <img src = "https://thatsitla.com/wp-content/uploads/2018/06/disney-bao-short-e1528905177899.jpg" />
+        <img src = { movie.titleImg } />
       </ImageTitle>
       <Controls>
         <PlayButton>
@@ -26,13 +49,14 @@ function Detail() {
         </GroupWatchButton>
       </Controls>
       <SubTitle>
-        2018 | 7m | Fantasy, Kids, Animation
+        {movie.SubTitle}
       </SubTitle>
       <Description>
-        An ageing Chinese mother, feeling alone when her
-        child moves out, gets a second chance at motherhood
-        when one of her dumplings comes to life.
+        {movie.description}
       </Description>
+      </>
+    )}
+      
   </Container>;
 }
 

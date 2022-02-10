@@ -19,7 +19,7 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path="/Detail" element = {<Detail />} />
+          <Route path="/Detail/:id" element = {<Detail />} />
           <Route path ="/Login" element = {<Login />} />
           <Route path ="/" element = {<Home />} />
         </Routes>
